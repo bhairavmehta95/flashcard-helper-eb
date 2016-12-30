@@ -11,13 +11,16 @@ def randomword(length):
 
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
-application.secret_key = 'kZGvjUVmmbtXj2akXxwKX6nm '
+
+# TODO: Change this
+application.secret_key = 'YOUR_SECRET_KEY '
 
 
 @application.route('/')
 @application.route('/index')
 def index_route():
-    client_id = 'tSV43kqc3K'
+   # TODO: Change this
+    client_id = 'GET_FROM_QUIZLET'
     scope = 'read'
     state = randomword(10)
 
@@ -43,10 +46,13 @@ def step_two_route():
     code = request.args.get('code')
     
     grant_type = 'authorization_code'
-    redirect_uri = 'http://flashcard-env.epum35ydrs.us-west-2.elasticbeanstalk.com/steptwo'
+      
+    # TODO: Change this
+    redirect_uri = 'REDIRECT_URI'
     #redirect_uri = 'http://localhost:5000/steptwo'
 
-    user_and_pass = 'dFNWNDNrcWMzSzpIYXJUM1pwTUplZ0FKTTREam5NUjgy'
+    # TODO: Change this
+    user_and_pass = 'CHANGE'
 
     headers = { 'Authorization' : 'Basic %s' %  user_and_pass }
 
