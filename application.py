@@ -5,6 +5,7 @@ from application.models import flashcard_users as fc_u
 import requests
 from urllib import urlencode
 
+
 def randomword(length):
    return ''.join(random.choice(string.lowercase) for i in range(length))
 
@@ -37,10 +38,10 @@ def index_route():
 def step_two_route():
     state = request.args.get('state')
 
-    # assert(state == session.get('state'))
+    assert(state == session.get('state'))
 
     code = request.args.get('code')
-
+    
     grant_type = 'authorization_code'
     redirect_uri = 'http://flashcard-env.epum35ydrs.us-west-2.elasticbeanstalk.com/steptwo'
     #redirect_uri = 'http://localhost:5000/steptwo'
@@ -62,38 +63,36 @@ def step_two_route():
     quizlet_username = json.loads(r.text)['user_id']
     access_token = json.loads(r.text)['access_token']
 
-    print(quizlet_username, access_token)
+    pin = None
 
+    context = {}
 
-    # try:     
-    new_user = fc_u(quizlet_username, access_token)
+    result = fc_u.query.filter_by(quizlet_username=quizlet_username).first()
 
-    db.session.add(new_user)
-    db.session.commit()        
-    db.session.close()
+    if result == None:
+        while True:
+            pin_try ="%04d" % random.randint(0,9999)
+            result = fc_u.query.filter_by(pin_code=pin_try).first()
+            if result == None:
+                print(pin_try, "is the pin for new user", quizlet_username)
+                new_user = fc_u(quizlet_username, access_token, pin_try)
 
-    print('added, commited, and closed.')
+                db.session.add(new_user)
+                db.session.commit()        
+                db.session.close()
 
-    # except:
-    #     db.session.rollback()
-    #     print('rolled back')
-
-    url_fragment_dic = {
-        "token_type" : "bearer",
-        "access_token" : access_token,
-        "state" : state
-    }
-
-    url_fragment = urlencode(url_fragment_dic)
-
-    full_redirect_url = 'https://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=M1N25YHTSEDAWK#' + url_fragment
-
-    print url_fragment, full_redirect_url
-
-    context = {
-        'url' : full_redirect_url
-    }
-
+                pin = pin_try
+                print('added, commited, and closed.')
+                context['greeting'] = 'Welcome to Flashcard Helper {}'.format(quizlet_username)
+                context['pin_code'] = pin
+                break
+    else:
+        print(result)
+        pin = result.pin_code
+        context['greeting'] = 'Welcome back to Flashcard Helper {}'.format(quizlet_username)
+        context['pin_code'] = pin
+        print('found a user')
+    
     return render_template('index.html', **context)
 
 

@@ -1,5 +1,47 @@
+<style>
+.html {
+	font-family: Arial, Helvetica, sans-serif;
+	margin-top: 50%;
+	background-color: red;
+	color: red;
+}
+.inline-link-1 {
+    display: inline-block;
+    margin: 0 0.2em;
+    padding: 3px;
+    background: #97CAF2;
+    border-radius: 2px;
+    transition: all 0.3s ease-out; 
+    /* Font styles */
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+}
+
+.inline-link-1:hover {
+    background: #53A7EA
+}
+
+.inline-link-1:active {
+    background: #C4E1F8
+}
+
+.inline-link-1:visited {
+    background: #F2BF97
+}
+
+</style>
+
 <html>
+{% if url %}
+	<center> <h2> Click <a class ="inline-link-1" href="{{ url }}"> here </a> to sign into your Quizlet account. </h2> </center>
+{% else %}
+	<center>
+	<h1> {{ greeting }} </h1>
+	<h2> Your pin code is: <br> {{ pin_code }} </h2>
+	<br>
+	<h3> Now, you can start to use the Flashcard helper skill. Say "Open Flashcard Helper skill", and when prompted, speak your pin to Alexa. </h3>
 
-<a href="{{ url }}"> Click Here </a>
-
+	</center>
+{% endif %}
 </html>

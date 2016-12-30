@@ -1,3 +1,7 @@
+config.py
+setup.py
+*.pyc
+application/*
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
