@@ -26,7 +26,7 @@ def index_route():
         client_id, scope, state)
 
     context = {
-        'url_quizlet' : url
+        'url' : url
     }
 
     session['state'] = state
@@ -43,6 +43,7 @@ def step_two_route():
 
     grant_type = 'authorization_code'
     redirect_uri = 'http://flashcard-env.epum35ydrs.us-west-2.elasticbeanstalk.com/steptwo'
+    #redirect_uri = 'http://localhost:5000/steptwo'
 
     user_and_pass = 'dFNWNDNrcWMzSzpIYXJUM1pwTUplZ0FKTTREam5NUjgy'
 
@@ -85,9 +86,15 @@ def step_two_route():
 
     url_fragment = urlencode(url_fragment_dic)
 
-    full_redirect_url = 'https://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=M1N25YHTSEDAWK&' + url_fragment
+    full_redirect_url = 'https://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=M1N25YHTSEDAWK#' + url_fragment
 
-    return redirect(full_redirect_url)
+    print url_fragment, full_redirect_url
+
+    context = {
+        'url' : full_redirect_url
+    }
+
+    return render_template('index.html', **context)
 
 
 # run the app.
