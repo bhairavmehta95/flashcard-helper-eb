@@ -4,7 +4,8 @@ from application import db
 from application.models import flashcard_users as fc_u
 import requests
 from urllib import urlencode
-
+ 
+   
 
 def randomword(length):
    return ''.join(random.choice(string.lowercase) for i in range(length))
